@@ -12,16 +12,16 @@ You can download the final apk [here](https://drive.google.com/file/d/1siGxSmiyh
 
 #### Project characteristics and tech-stack
 * Tech-stack
-** 100% kotlin & Coroutines
-** Retrofit - networking
-** RXjava2
-** Jetpack
-*** Navigation
-*** LiveData
-*** ViewModel
-*** Room 
-*** Dagger-Hilt
-** Glide
-** SpinKit 
-* Architecture
-** MVVM
+    * 100% kotlin & Coroutines
+    * Retrofit - networking
+    * RXjava2
+    * Jetpack
+        * Navigation
+        * LiveData
+        * ViewModel
+        * Room 
+        * Dagger-Hilt
+    * Glide
+    * SpinKit 
+    * Architecture
+    * MVVM
