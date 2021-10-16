@@ -23,5 +23,5 @@ You can download the final apk [here](https://drive.google.com/file/d/1siGxSmiyh
         * Dagger-Hilt
     * Glide
     * SpinKit 
-    * Architecture
+* Architecture
     * MVVM
