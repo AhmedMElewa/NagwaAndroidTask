@@ -25,7 +25,6 @@ import javax.inject.Inject
 @HiltViewModel
 class BookViewModel @Inject constructor(
     private val repository: MainRepository,
-    private val itemDao: ItemDao
 ) : ViewModel() {
 
 //    private val _books = MutableLiveData<Resource<List<ItemModel>>>()
@@ -44,24 +43,24 @@ class BookViewModel @Inject constructor(
 
     fun fetchBooks() {
         _offlineBooks.postValue(Resource.loading(null))
-            compositeDisposable.add(
-                repository.getRemoteVideos()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .map { it.filter { videoList -> videoList.type == "PDF" } }
-                    .subscribe({ videoList ->
-                        saveBooksInDB(videoList)
-                    }, {
-                        getBooksFromDB()
-                    })
-            )
+        compositeDisposable.add(
+            repository.getRemoteVideos()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map { it.filter { videoList -> videoList.type == "PDF" } }
+                .subscribe({ videoList ->
+                    saveBooksInDB(videoList)
+                }, {
+                    getBooksFromDB()
+                })
+        )
 
     }
 
 
     private fun saveBooksInDB(books: List<ItemModel>) {
         viewModelScope.launch {
-            itemDao.insert(books)
+            repository.insert(books)
             getBooksFromDB()
         }
     }
@@ -69,12 +68,14 @@ class BookViewModel @Inject constructor(
     private fun getBooksFromDB() {
         viewModelScope.launch {
 
-            itemDao.get("PDF"). catch { e ->
-                _offlineBooks.value = Resource.noInternet("Check your internet connection",emptyList())
+            repository.getBookFromDB().catch { e ->
+                _offlineBooks.value =
+                    Resource.noInternet("Check your internet connection", emptyList())
             }.collect {
-                if(it.isNullOrEmpty()){
-                    _offlineBooks.value = Resource.noInternet("Check your internet connection",emptyList())
-                }else{
+                if (it.isNullOrEmpty()) {
+                    _offlineBooks.value =
+                        Resource.noInternet("Check your internet connection", emptyList())
+                } else {
                     _offlineBooks.value = Resource.success(it)
                 }
             }

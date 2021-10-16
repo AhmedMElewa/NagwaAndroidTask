@@ -25,7 +25,6 @@ import javax.inject.Inject
 @HiltViewModel
 class VideoViewModel @Inject constructor(
     private val repository: MainRepository,
-    private val itemDao: ItemDao
 ) : ViewModel() {
 
 //    private val _videos = MutableLiveData<Resource<List<ItemModel>>>()
@@ -64,7 +63,7 @@ class VideoViewModel @Inject constructor(
 
     private fun saveVideosInDB(videos: List<ItemModel>) {
         viewModelScope.launch {
-            itemDao.insert(videos)
+            repository.insert(videos)
 //            _videos.value = Resource.success(videos)
             getVideosFromDB()
         }
@@ -72,7 +71,7 @@ class VideoViewModel @Inject constructor(
 
     private fun getVideosFromDB() {
         viewModelScope.launch {
-            itemDao.get("VIDEO").catch { e ->
+            repository.getVideoFromDB().catch { e ->
                 _offlineVideos.value =
                     Resource.noInternet("Check your internet connection", emptyList())
             }.collect {
@@ -84,13 +83,7 @@ class VideoViewModel @Inject constructor(
                 }
             }
         }
-//        viewModelScope.launch {
-//            itemDao.get("VIDEO").catch { e ->
-//                _offlineVideos.value = emptyList()
-//            }.collect {
-//                _offlineVideos.value = it
-//            }
-//        }
+
     }
 
 

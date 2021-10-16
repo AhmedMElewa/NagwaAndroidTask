@@ -2,16 +2,11 @@ package com.elewa.nagwaandroidtask.data.local
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
-import androidx.room.RoomDatabase
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import com.elewa.nagwaandroidtask.data.model.ItemModel
-import com.elewa.nagwaandroidtask.getOrAwaitValue
-import com.elewa.nagwaandroidtask.util.Constants.DATABASE_NAME
 import com.google.common.truth.Truth.assertThat
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runBlockingTest
@@ -20,8 +15,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import javax.inject.Inject
-import javax.inject.Named
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
