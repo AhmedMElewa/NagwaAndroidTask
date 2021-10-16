@@ -9,6 +9,9 @@ import kotlinx.coroutines.flow.Flow
 interface ItemDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertItem(itemList:ItemModel)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(itemList: List<ItemModel>)
 
     @Query("SELECT * FROM item where type=:type")

@@ -62,7 +62,7 @@ class ForegroundService : Service() {
                     model.status = model.status!! + rand
                 }
 
-                AppDatabase.getInstance(applicationContext).itemDao.update(model.id, model.status)
+                AppDatabase.getInstance(applicationContext).itemDao().update(model.id, model.status)
 
                 if (model.status == 100) {
                     break

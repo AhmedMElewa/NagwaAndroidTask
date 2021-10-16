@@ -68,7 +68,8 @@ class BookViewModel @Inject constructor(
 
     private fun getBooksFromDB() {
         viewModelScope.launch {
-            itemDao.get("PDF").catch { e ->
+
+            itemDao.get("PDF"). catch { e ->
                 _offlineBooks.value = Resource.noInternet("Check your internet connection",emptyList())
             }.collect {
                 if(it.isNullOrEmpty()){

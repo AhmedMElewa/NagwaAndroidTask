@@ -31,7 +31,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class ApplicationModule {
+object ApplicationModule {
 
     @Provides
     fun provideBaseUrl() = BASE_URL
@@ -78,6 +78,6 @@ class ApplicationModule {
 
     @Provides
     fun provideItemDao(@ApplicationContext appContext: Context): ItemDao {
-        return AppDatabase.getInstance(appContext).itemDao
+        return AppDatabase.getInstance(appContext).itemDao()
     }
 }

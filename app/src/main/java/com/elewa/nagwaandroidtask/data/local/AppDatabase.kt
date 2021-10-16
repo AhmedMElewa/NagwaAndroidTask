@@ -10,8 +10,9 @@ import com.elewa.nagwaandroidtask.util.Constants.DATABASE_NAME
 @Database(entities = [ItemModel::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract val itemDao: ItemDao
+//    abstract val itemDao: ItemDao
 
+    abstract fun itemDao(): ItemDao
 
     companion object {
 
