@@ -33,7 +33,7 @@ class ItemDaoTest {
             ApplicationProvider.getApplicationContext(),
             AppDatabase::class.java
         ).allowMainThreadQueries().build()
-        dao = database.itemDao()
+        dao = database.itemDao
     }
 
     @After

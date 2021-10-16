@@ -78,6 +78,6 @@ object ApplicationModule {
 
     @Provides
     fun provideItemDao(@ApplicationContext appContext: Context): ItemDao {
-        return AppDatabase.getInstance(appContext).itemDao()
+        return AppDatabase.getInstance(appContext).itemDao
     }
 }

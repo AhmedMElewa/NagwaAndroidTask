@@ -23,7 +23,7 @@ class VideoAdapter(
             oldItem: ItemModel,
             newItem: ItemModel
         ): Boolean {
-            return oldItem.id == newItem.id
+            return oldItem.id == newItem.id && oldItem.status == oldItem.status
         }
 
         override fun areContentsTheSame(

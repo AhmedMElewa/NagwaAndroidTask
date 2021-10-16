@@ -27,10 +27,6 @@ class BookViewModel @Inject constructor(
     private val repository: MainRepository,
 ) : ViewModel() {
 
-//    private val _books = MutableLiveData<Resource<List<ItemModel>>>()
-//    val books: LiveData<Resource<List<ItemModel>>>
-//        get() = _books
-
     private val _offlineBooks = MutableLiveData<Resource<List<ItemModel>>>()
     val offlineBooks: LiveData<Resource<List<ItemModel>>>
         get() = _offlineBooks
@@ -69,12 +65,10 @@ class BookViewModel @Inject constructor(
         viewModelScope.launch {
 
             repository.getBookFromDB().catch { e ->
-                _offlineBooks.value =
-                    Resource.noInternet("Check your internet connection", emptyList())
+                _offlineBooks.value = Resource.noInternet("Check your internet connection", emptyList())
             }.collect {
                 if (it.isNullOrEmpty()) {
-                    _offlineBooks.value =
-                        Resource.noInternet("Check your internet connection", emptyList())
+                    _offlineBooks.value = Resource.noInternet("Check your internet connection", emptyList())
                 } else {
                     _offlineBooks.value = Resource.success(it)
                 }

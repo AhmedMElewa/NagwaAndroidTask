@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,16 +12,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.elewa.nagwaandroidtask.R
 import com.elewa.nagwaandroidtask.data.model.ItemModel
 import com.elewa.nagwaandroidtask.databinding.FragmentVideoBinding
 import com.elewa.nagwaandroidtask.util.Constants
 import com.elewa.nagwaandroidtask.util.Constants.DOWNLOADFLAG
-import com.elewa.nagwaandroidtask.util.LoadingView
 import com.elewa.nagwaandroidtask.util.Status
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 import com.elewa.nagwaandroidtask.util.service.ForegroundService
 
@@ -34,10 +32,6 @@ class VideoFragment : Fragment(), VideoAdapter.OnVideoAdapterClickListener {
     private lateinit var adapter: VideoAdapter
 
     private val viewmodel: VideoViewModel by viewModels()
-
-//    @Inject
-//    lateinit var loadingView: LoadingView
-
 
 
 
@@ -68,67 +62,30 @@ class VideoFragment : Fragment(), VideoAdapter.OnVideoAdapterClickListener {
 
     private fun observer() {
 
-//        viewmodel.videos.observe(viewLifecycleOwner, {
-//            when (it.status) {
-//                Status.SUCCESS -> {
-//                    it.data?.let { videoData ->
-//                        adapter.apply {
-//                            adapter.submitList(videoData)
-//                            Toast.makeText(requireContext(), "Done", Toast.LENGTH_LONG).show()
-//                        }
-//                    }
-//                    binding.recyclerVideos.visibility = View.VISIBLE
-//                    loadingView.dismissLoading()
-//                }
-//                Status.LOADING -> {
-//                    loadingView.showLoading()
-//                    binding.recyclerVideos.visibility = View.GONE
-//                }
-//                Status.ERROR -> {
-//                    //Handle Error
-//                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
-//                    loadingView.dismissLoading()
-//                }
-//                Status.INTERNET -> {
-//                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
-//                    loadingView.dismissLoading()
-//                }
-//            }
-//        })
-
 
         viewmodel.offlineVideos.observe(viewLifecycleOwner,{
             when (it.status) {
                 Status.SUCCESS -> {
                     if (it.data.isNullOrEmpty()){
-                        Toast.makeText(requireContext(), "Check your internet Connection!", Toast.LENGTH_SHORT).show()
-                        binding.swipeRefresh.isRefreshing = false
-//                        loadingView.dismissLoading()
+                        Toast.makeText(requireContext(), "No Internet Connection", Toast.LENGTH_LONG).show()
                     }else{
-                        it.data?.let { videoData ->
-                            adapter.apply {
-                                adapter.submitList(videoData)
-                            }
+                        adapter.apply {
+                            adapter.submitList(it.data)
+                            binding.recyclerVideos.visibility = View.VISIBLE
                         }
-                        binding.recyclerVideos.visibility = View.VISIBLE
-                        binding.swipeRefresh.isRefreshing = false
-//                        loadingView.dismissLoading()
                     }
+                    binding.swipeRefresh.isRefreshing = false
                 }
                 Status.LOADING -> {
-//                    loadingView.showLoading()
                     binding.swipeRefresh.isRefreshing = true
                     binding.recyclerVideos.visibility = View.GONE
                 }
                 Status.ERROR -> {
-                    //Handle Error
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
-//                    loadingView.dismissLoading()
                     binding.swipeRefresh.isRefreshing = false
                 }
                 Status.INTERNET -> {
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
-//                    loadingView.dismissLoading()
                     binding.swipeRefresh.isRefreshing = false
                 }
             }
@@ -169,7 +126,7 @@ class VideoFragment : Fragment(), VideoAdapter.OnVideoAdapterClickListener {
                 txtYes.setOnClickListener {
 
                     //Fire service to download
-                    ForegroundService.startService(requireContext(), item.name+" is donloading...",item.id)
+                    ForegroundService.startService(requireContext(), item.name+" is downloading...",item.id)
 
                     myDialog.dismiss()
 

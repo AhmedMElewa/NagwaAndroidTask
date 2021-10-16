@@ -18,7 +18,7 @@ import com.elewa.nagwaandroidtask.util.Constants
 import kotlinx.coroutines.*
 
 class ForegroundService : Service() {
-    private val CHANNEL_ID = "Downloading"
+    private val CHANNEL_ID = "ForegroundService"
     companion object {
         fun startService(context: Context, message: String,itemId: Int) {
             val startIntent = Intent(context, ForegroundService::class.java)
@@ -62,9 +62,10 @@ class ForegroundService : Service() {
                     model.status = model.status!! + rand
                 }
 
-                AppDatabase.getInstance(applicationContext).itemDao().update(model.id, model.status)
+                AppDatabase.getInstance(applicationContext).itemDao.update(model.id, model.status)
 
                 if (model.status == 100) {
+                    stopSelf();
                     break
                 }
             }
@@ -73,7 +74,7 @@ class ForegroundService : Service() {
 
         }
 
-        stopSelf();
+//        stopSelf();
         return START_NOT_STICKY
     }
     override fun onBind(intent: Intent): IBinder? {

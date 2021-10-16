@@ -27,10 +27,6 @@ class VideoViewModel @Inject constructor(
     private val repository: MainRepository,
 ) : ViewModel() {
 
-//    private val _videos = MutableLiveData<Resource<List<ItemModel>>>()
-//    val videos: LiveData<Resource<List<ItemModel>>>
-//        get() = _videos
-
     private val _offlineVideos = MutableLiveData<Resource<List<ItemModel>>>()
     val offlineVideos: LiveData<Resource<List<ItemModel>>>
         get() = _offlineVideos
@@ -44,7 +40,6 @@ class VideoViewModel @Inject constructor(
 
 
     fun fetchVideos() {
-//        _videos.postValue(Resource.loading(null))
         _offlineVideos.postValue(Resource.loading(null))
         compositeDisposable.add(
             repository.getRemoteVideos()
@@ -53,8 +48,8 @@ class VideoViewModel @Inject constructor(
                 .map { it.filter { videoList -> videoList.type == "VIDEO" } }
                 .subscribe({ videoList ->
                     saveVideosInDB(videoList)
-//                        _videos.postValue(Resource.success(videoList))
                 }, {
+
                     getVideosFromDB()
                 })
         )
@@ -64,7 +59,6 @@ class VideoViewModel @Inject constructor(
     private fun saveVideosInDB(videos: List<ItemModel>) {
         viewModelScope.launch {
             repository.insert(videos)
-//            _videos.value = Resource.success(videos)
             getVideosFromDB()
         }
     }
@@ -72,12 +66,12 @@ class VideoViewModel @Inject constructor(
     private fun getVideosFromDB() {
         viewModelScope.launch {
             repository.getVideoFromDB().catch { e ->
-                _offlineVideos.value =
-                    Resource.noInternet("Check your internet connection", emptyList())
+                _offlineVideos.value = Resource.noInternet("No Internet connection", emptyList())
+
             }.collect {
                 if (it.isNullOrEmpty()) {
                     _offlineVideos.value =
-                        Resource.noInternet("Check your internet connection", emptyList())
+                        Resource.noInternet("No Internet connection", emptyList())
                 } else {
                     _offlineVideos.value = Resource.success(it)
                 }
