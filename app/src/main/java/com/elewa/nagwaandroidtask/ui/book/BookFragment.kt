@@ -35,8 +35,8 @@ class BookFragment : Fragment(),BookAdapter.OnBookClickListener {
 
     private val viewmodel: BookViewModel by viewModels()
 
-    @Inject
-    lateinit var loadingView: LoadingView
+//    @Inject
+//    lateinit var loadingView: LoadingView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,6 +53,12 @@ class BookFragment : Fragment(),BookAdapter.OnBookClickListener {
     private fun init() {
         adapter = BookAdapter(this)
         binding.recyclerBook.adapter = adapter
+        // SwipeRefresh
+        binding.swipeRefresh.setProgressBackgroundColorSchemeColor(Color.parseColor("#FF313131"))
+        binding.swipeRefresh.setColorSchemeColors(Color.parseColor("#ffeb3b"))
+        binding.swipeRefresh.setOnRefreshListener {
+            viewmodel.fetchBooks()
+        }
     }
 
     private fun observer() {
@@ -89,7 +95,8 @@ class BookFragment : Fragment(),BookAdapter.OnBookClickListener {
                 Status.SUCCESS -> {
                     if (it.data.isNullOrEmpty()){
                         Toast.makeText(requireContext(), "Check your internet Connection!", Toast.LENGTH_SHORT).show()
-                        loadingView.dismissLoading()
+                        binding.swipeRefresh.isRefreshing = false
+//                        loadingView.dismissLoading()
                     }else{
                         it.data?.let { videoData ->
                             adapter.apply {
@@ -97,21 +104,25 @@ class BookFragment : Fragment(),BookAdapter.OnBookClickListener {
                             }
                         }
                         binding.recyclerBook.visibility = View.VISIBLE
-                        loadingView.dismissLoading()
+                        binding.swipeRefresh.isRefreshing = false
+//                        loadingView.dismissLoading()
                     }
                 }
                 Status.LOADING -> {
-                    loadingView.showLoading()
+//                    loadingView.showLoading()
+                    binding.swipeRefresh.isRefreshing = true
                     binding.recyclerBook.visibility = View.GONE
                 }
                 Status.ERROR -> {
                     //Handle Error
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
-                    loadingView.dismissLoading()
+//                    loadingView.dismissLoading()
+                    binding.swipeRefresh.isRefreshing = false
                 }
                 Status.INTERNET -> {
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
-                    loadingView.dismissLoading()
+//                    loadingView.dismissLoading()
+                    binding.swipeRefresh.isRefreshing = false
                 }
             }
         })

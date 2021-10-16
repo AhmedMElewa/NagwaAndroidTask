@@ -43,7 +43,7 @@ class VideoViewModel @Inject constructor(
     }
 
 
-    private fun fetchVideos() {
+    fun fetchVideos() {
 //        _videos.postValue(Resource.loading(null))
         _offlineVideos.postValue(Resource.loading(null))
         compositeDisposable.add(

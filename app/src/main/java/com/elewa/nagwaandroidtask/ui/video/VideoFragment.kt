@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.elewa.nagwaandroidtask.R
 import com.elewa.nagwaandroidtask.data.model.ItemModel
 import com.elewa.nagwaandroidtask.databinding.FragmentVideoBinding
@@ -34,8 +35,8 @@ class VideoFragment : Fragment(), VideoAdapter.OnVideoAdapterClickListener {
 
     private val viewmodel: VideoViewModel by viewModels()
 
-    @Inject
-    lateinit var loadingView: LoadingView
+//    @Inject
+//    lateinit var loadingView: LoadingView
 
 
 
@@ -56,6 +57,13 @@ class VideoFragment : Fragment(), VideoAdapter.OnVideoAdapterClickListener {
     private fun init() {
         adapter = VideoAdapter(this)
         binding.recyclerVideos.adapter = adapter
+
+        // SwipeRefresh
+        binding.swipeRefresh.setProgressBackgroundColorSchemeColor(Color.parseColor("#FF313131"))
+        binding.swipeRefresh.setColorSchemeColors(Color.parseColor("#ffeb3b"))
+        binding.swipeRefresh.setOnRefreshListener {
+            viewmodel.fetchVideos()
+        }
     }
 
     private fun observer() {
@@ -94,7 +102,8 @@ class VideoFragment : Fragment(), VideoAdapter.OnVideoAdapterClickListener {
                 Status.SUCCESS -> {
                     if (it.data.isNullOrEmpty()){
                         Toast.makeText(requireContext(), "Check your internet Connection!", Toast.LENGTH_SHORT).show()
-                        loadingView.dismissLoading()
+                        binding.swipeRefresh.isRefreshing = false
+//                        loadingView.dismissLoading()
                     }else{
                         it.data?.let { videoData ->
                             adapter.apply {
@@ -102,21 +111,25 @@ class VideoFragment : Fragment(), VideoAdapter.OnVideoAdapterClickListener {
                             }
                         }
                         binding.recyclerVideos.visibility = View.VISIBLE
-                        loadingView.dismissLoading()
+                        binding.swipeRefresh.isRefreshing = false
+//                        loadingView.dismissLoading()
                     }
                 }
                 Status.LOADING -> {
-                    loadingView.showLoading()
+//                    loadingView.showLoading()
+                    binding.swipeRefresh.isRefreshing = true
                     binding.recyclerVideos.visibility = View.GONE
                 }
                 Status.ERROR -> {
                     //Handle Error
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
-                    loadingView.dismissLoading()
+//                    loadingView.dismissLoading()
+                    binding.swipeRefresh.isRefreshing = false
                 }
                 Status.INTERNET -> {
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
-                    loadingView.dismissLoading()
+//                    loadingView.dismissLoading()
+                    binding.swipeRefresh.isRefreshing = false
                 }
             }
         })

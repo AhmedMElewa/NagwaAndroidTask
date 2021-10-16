@@ -7,6 +7,12 @@
     tools:context=".ui.video.VideoFragment"
     android:background="@color/background">
 
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerVideos"
         android:layout_width="0dp"
@@ -19,5 +25,6 @@
         tools:itemCount="10"
         tools:listitem="@layout/row_video"/>
 
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

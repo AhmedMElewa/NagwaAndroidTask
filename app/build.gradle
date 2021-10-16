@@ -98,6 +98,9 @@ dependencies {
     //loading
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
 
+    // Swipe to refresh
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+
 
     // Local Unit Tests
     implementation "androidx.test:core:1.2.0"
