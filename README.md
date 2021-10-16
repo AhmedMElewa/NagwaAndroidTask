@@ -25,3 +25,6 @@ You can download the final apk [here](https://drive.google.com/file/d/1siGxSmiyh
     * ~~SpinKit~~ -> SwipeRefresh 
 * Architecture
     * MVVM
+
+### Note
+If you find problem with getting data in first time, that's because the web service have limitation number of requests (50) request.
