@@ -22,6 +22,6 @@ You can download the final apk [here](https://drive.google.com/file/d/1siGxSmiyh
         * Room 
         * Dagger-Hilt
     * Glide
-    * SpinKit 
+    * SpinKit -> SwipeRefresh 
 * Architecture
     * MVVM
